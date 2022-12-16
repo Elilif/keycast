@@ -378,7 +378,8 @@ t to show the actual COMMAND, or a symbol to be shown instead."
             (< keycast--command-repetitions 0))
         (cl-incf keycast--command-repetitions)
       (setq keycast--command-repetitions 0)))
-  (when keycast-mode-line-mode
+  (when (and keycast-mode-line-mode
+             (not mood-line-mode))
     (keycast--maybe-edit-local-format
      'mode-line-format
      'keycast-mode-line
