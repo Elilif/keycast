@@ -1,13 +1,13 @@
 ;;; keycast.el --- Show current command and its binding  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2018-2022 Jonas Bernoulli
+;; Copyright (C) 2018-2023 Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/keycast
 ;; Keywords: multimedia
 
-;; Package-Requires: ((emacs "25.3") (compat "28.1.1.0"))
-;; Package-Version: 1.2.0.50-git
+;; Package-Requires: ((emacs "25.3") (compat "29.1.4.1"))
+;; Package-Version: 1.3.2
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -463,12 +463,13 @@ t to show the actual COMMAND, or a symbol to be shown instead."
         (t t)))
 
 (defun keycast--tree-member (elt tree)
-  (or (member elt tree)
-      (catch 'found
-        (dolist (sub tree)
-          (when-let ((found (and (listp sub)
-                                 (keycast--tree-member elt sub))))
-            (throw 'found found))))))
+  ;; Also known as auto-compile--tree-member.
+  (and (listp tree)
+       (or (member elt tree)
+           (catch 'found
+             (dolist (sub tree)
+               (when-let ((found (keycast--tree-member elt sub)))
+                 (throw 'found found)))))))
 
 ;;; Mode-Line
 
